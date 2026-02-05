@@ -1,0 +1,17 @@
+{
+  "name": "browser-automation",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Browser automation with Puppeteer in Docker",
+  "main": "script.js",
+  "scripts": {
+    "start": "node script.js",
+    "test": "node script.js"
+  },
+  "dependencies": {
+    "puppeteer": "^22.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

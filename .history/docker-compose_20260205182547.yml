@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  browser-automation:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: browser-automation
+    # Uncomment to run in detached mode
+    # detach: true
+    

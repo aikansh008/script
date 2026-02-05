@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  browser-automation:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: browser-automation
+    
+    volumes:
+      # Share current directory to save screenshots and outputs
+      - .:/app
+    
+    environment:
+      # Node environment
+      - NODE_ENV=production
+      - HEADLESS=true
+      # Optional: Customize these for your script
+      # - WEBSITE_URL=https://example.com
+      # - AUTOMATION_INTERVAL=3600
+    
+    # Restart configuration for automation
+    restart: on-failure
+    restart_policy:
+      condition: on-failure
+      delay: 5s
+      max_attempts: 3
+      window: 60s
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          memory: 1G
+    
+    # Network configuration
+    networks:
+      - automation
+
+networks:
+  automation:
+    driver: bridge

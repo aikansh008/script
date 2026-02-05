@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  browser-automation:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: browser-automation
+    # Uncomment to run in detached mode
+    # detach: true
+    
+    ports:
+      - "5900:5900"  # VNC port
+    
+    volumes:
+      # Share current directory to save screenshots
+      - .:/app
+    
+    environment:
+      # Optional: Add environment variables here
+      - NODE_ENV=production
+      # - WEBSITE_URL=https://example.com
+    
+    # Resource limits (optional)
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          memory: 1G
+    
+    # Restart policy
+    restart: no
+    
+    # Network configuration (optional)
+    networks:
+      - automation
+
+networks:
+  automation:
+    driver: bridge

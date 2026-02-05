@@ -1,0 +1,15 @@
+FROM ghcr.io/puppeteer/puppeteer:22
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy application code
+COPY . .
+
+# Run the script
+CMD ["node", "script.js"]

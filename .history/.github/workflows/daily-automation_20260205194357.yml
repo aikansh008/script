@@ -1,0 +1,57 @@
+# Cloud Automation with GitHub Actions
+# This workflow runs your Docker automation on schedule (8 AM every day)
+# No need to keep your computer on!
+
+name: Daily Browser Automation
+
+# Schedule: Every day at 8:00 AM UTC
+# Modify the schedule or add email notifications as needed
+on:
+  schedule:
+    # Cron format: minute hour day month day-of-week
+    # 0 8 * * * = Every day at 08:00 UTC
+    - cron: '0 8 * * *'
+  
+  # Also allow manual trigger from GitHub UI
+  workflow_dispatch:
+
+jobs:
+  automation:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+      
+      - name: Build Docker image
+        run: docker build -t browser-automation .
+      
+      - name: Run automation
+        run: |
+          docker run \
+            --rm \
+            --volume ${{ github.workspace }}:/app \
+            browser-automation
+      
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshots
+          path: |
+            *.png
+            *.jpg
+            logs/
+          retention-days: 30
+      
+      - name: Commit results (optional)
+        if: always()
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git commit -m "Auto: Daily automation run $(date)" || echo "No changes to commit"
+          git push || echo "Nothing to push"
