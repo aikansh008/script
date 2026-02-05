@@ -5,8 +5,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies with npm ci for better Docker support
-RUN npm ci --omit=dev || npm install --legacy-peer-deps
+# Install dependencies
+RUN npm install --no-audit --no-fund
 
 # Copy application code
 COPY . .
